@@ -14,7 +14,10 @@ import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.compo
   styleUrl: './user.component.scss',
 })
 export class UserComponent {
-  constructor(public dialogRef: MatDialog) {}
+  
+  constructor(public dialogRef: MatDialog) {
+    
+  }
 
   openDialog() {
     this.dialogRef.open(DialogAddUserComponent);
