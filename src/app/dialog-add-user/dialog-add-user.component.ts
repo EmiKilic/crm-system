@@ -8,6 +8,7 @@ import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material
 import { MatIconModule } from '@angular/material/icon';
 import { User } from '../../models/user.class';
 import { FormsModule } from '@angular/forms';
+import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-dialog-add-user',
@@ -31,14 +32,24 @@ export class DialogAddUserComponent {
   user = new User();
   birthDate: Date | null = null;
 
-  constructor() {}
+  constructor(private firestore: Firestore) {}
 
-  saveUser() {
+  async saveUser() {
     if (this.birthDate) {
       this.user.birthDate = this.birthDate.getTime();
       console.log('current user is', this.user);
     } else {
       console.log('Birth date is not set!');
+      return;
+    }
+
+    try {
+      // Use collection() and addDoc() for modern Firestore API
+      const usersCollection = collection(this.firestore, 'users');
+      const result = await addDoc(usersCollection, { ...this.user.toJSON() });
+      console.log('User added successfully:', result.id);
+    } catch (error) {
+      console.error('Error adding user:', error);
     }
   }
 
