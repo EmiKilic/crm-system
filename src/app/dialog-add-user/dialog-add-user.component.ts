@@ -9,6 +9,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { User } from '../../models/user.class';
 import { FormsModule } from '@angular/forms';
 import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-dialog-add-user',
@@ -22,6 +25,8 @@ import { Firestore, collection, addDoc } from '@angular/fire/firestore';
     MatNativeDateModule,
     MatIconModule,
     FormsModule,
+    MatProgressBarModule,
+    CommonModule
   ],
   templateUrl: './dialog-add-user.component.html',
   styleUrls: ['./dialog-add-user.component.scss'],
@@ -31,6 +36,7 @@ import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 export class DialogAddUserComponent {
   user = new User();
   birthDate: Date | null = null;
+  loading = false;
 
   constructor(private firestore: Firestore) {}
 
@@ -42,11 +48,12 @@ export class DialogAddUserComponent {
       console.log('Birth date is not set!');
       return;
     }
-
+    this.loading = true;
     try {
       // Use collection() and addDoc() for modern Firestore API
       const usersCollection = collection(this.firestore, 'users');
       const result = await addDoc(usersCollection, { ...this.user.toJSON() });
+      this.loading = false;
       console.log('User added successfully:', result.id);
     } catch (error) {
       console.error('Error adding user:', error);
