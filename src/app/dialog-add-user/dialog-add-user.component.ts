@@ -1,17 +1,19 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
+import {
+  MatNativeDateModule,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { User } from '../../models/user.class';
 import { FormsModule } from '@angular/forms';
 import { Firestore, collection, addDoc } from '@angular/fire/firestore';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
-
 
 @Component({
   selector: 'app-dialog-add-user',
@@ -26,7 +28,7 @@ import { CommonModule } from '@angular/common';
     MatIconModule,
     FormsModule,
     MatProgressBarModule,
-    CommonModule
+    CommonModule,
   ],
   templateUrl: './dialog-add-user.component.html',
   styleUrls: ['./dialog-add-user.component.scss'],
@@ -38,7 +40,10 @@ export class DialogAddUserComponent {
   birthDate: Date | null = null;
   loading = false;
 
-  constructor(private firestore: Firestore) {}
+  constructor(
+    public dialogRef: MatDialogRef<DialogAddUserComponent>,
+    private firestore: Firestore
+  ) {}
 
   async saveUser() {
     if (this.birthDate) {
@@ -55,6 +60,7 @@ export class DialogAddUserComponent {
       const result = await addDoc(usersCollection, { ...this.user.toJSON() });
       this.loading = false;
       console.log('User added successfully:', result.id);
+      this.dialogRef.close();
     } catch (error) {
       console.error('Error adding user:', error);
     }
