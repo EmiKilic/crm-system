@@ -6,11 +6,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.component';
 import { MatCardModule } from '@angular/material/card';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, docSnapshots } from '@angular/fire/firestore';
 import { User } from '../../models/user.class';
 import { CommonModule, NgFor } from '@angular/common';
-
-
+import { Observable } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -21,26 +21,30 @@ import { CommonModule, NgFor } from '@angular/common';
     MatDialogModule,
     MatCardModule,
     NgFor,
-    CommonModule
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './user.component.html',
-  styleUrl: './user.component.scss',
+  styleUrls: ['./user.component.scss'],
 })
 export class UserComponent {
-  user= new User();
-  allUsers: (User & { id: string })[] = [];
+  user = new User();
+  allUsers: (User & { id: string })[] = []; // Alle Benutzer mit ihrer ID
 
   constructor(public dialogRef: MatDialog, private firestore: Firestore) {}
 
   ngOnInit(): void {
+    // Sammlung aus Firestore holen
     const usersCollection = collection(this.firestore, 'users');
+
+    // Daten mit ID extrahieren
     collectionData(usersCollection, { idField: 'id' }).subscribe((changes) => {
       console.log('Received changes from DB:', changes);
-      this.allUsers = changes as (User & { id: string })[];
+      this.allUsers = changes as (User & { id: string })[]; // Die ID wird zu jedem Objekt hinzugefügt
     });
   }
 
-  openDialog() {
+  openDialog(): void {
     this.dialogRef.open(DialogAddUserComponent);
   }
 }
