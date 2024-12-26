@@ -9,10 +9,13 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { User } from '../../models/user.class';
+import { MatIcon } from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+
 
 @Component({
   selector: 'app-user-detail',
-  imports: [MatCard, MatCardContent, MatCardTitle, MatCardHeader],
+  imports: [MatCard, MatCardContent, MatCardTitle, MatCardHeader, MatIcon, MatMenuModule],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
 })
@@ -39,4 +42,15 @@ export class UserDetailComponent {
       console.log('Received User', this.user);
     });
   }
+
+
+
+  editMenu() {
+
+  }
+  editUserDetail() {
+    
+  }
 }
+
+

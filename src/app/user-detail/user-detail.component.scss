@@ -29,3 +29,13 @@
         margin: 0px;
     }
 }
+
+.pin-right-upper-corner {
+    position: absolute;
+    right: 0;
+    top: 16px;
+    border: 0px;
+    border-radius: 100%;
+    cursor: pointer;
+    background-color: transparent;
+}
