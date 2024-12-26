@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Firestore, doc, docData } from '@angular/fire/firestore';
 import {
   MatCard,
   MatCardContent,
@@ -6,6 +7,8 @@ import {
   MatCardTitle,
 } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { User } from '../../models/user.class';
 
 @Component({
   selector: 'app-user-detail',
@@ -15,14 +18,25 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class UserDetailComponent {
   userId = '';
+  user: User = new User();
+  private subscription!: Subscription;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private firestore: Firestore) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe( paraMap => {
+    this.route.paramMap.subscribe((paraMap) => {
       this.userId = paraMap.get('id') ?? '';
       console.log('Got Id', this.userId);
-      
-    })
+      this.getUser();
+    });
+  }
+
+
+  getUser() {
+    const userDoc = doc(this.firestore, `users/${this.userId}`);
+    this.subscription = docData(userDoc).subscribe((user) => {
+      this.user = new User(user);
+      console.log('Received User', this.user);
+    });
   }
 }
