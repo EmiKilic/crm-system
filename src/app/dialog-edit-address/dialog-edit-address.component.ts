@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-dialog-edit-address',
@@ -31,13 +32,31 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class DialogEditAddressComponent {
   user: User;
+  userId:string = '';
   loading = false;
 
-  constructor(public dialogRef: MatDialogRef<DialogEditAddressComponent>) {
+  constructor(public dialogRef: MatDialogRef<DialogEditAddressComponent>, private firestore: Firestore) {
     this.user = new User();
   }
 
   
 
-  saveUser() {}
+  async saveUser() {
+    if (!this.userId) {
+      console.error('User ID is required to update the user');
+      return;
+    }
+
+    this.loading = true;
+    try {
+      const userDocRef = doc(this.firestore, `users/${this.userId}`);
+      await updateDoc(userDocRef, this.user.toJSON());
+      console.log('User updated successfully');
+      this.dialogRef.close(); // Close the dialog after a successful update
+    } catch (error) {
+      console.error('Error updating user:', error);
+    } finally {
+      this.loading = false;
+    }
+  }
 }
