@@ -25,7 +25,7 @@
 <mat-dialog-content>
     <mat-form-field appearance="outline" class="mr-16" style="padding-top: 8px;" class="full-width">
         <mat-label>Birth Date</mat-label>
-        <input [disabled]="loading" [(ngModel)]="user.birthDate" matInput placeholder="Birth Date" [matDatepicker]="picker">
+        <input [disabled]="loading" [(ngModel)]="birthDate" matInput placeholder="Birth Date" [matDatepicker]="picker">
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         <mat-hint>Pleas enter a date</mat-hint>

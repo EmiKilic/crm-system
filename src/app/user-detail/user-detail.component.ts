@@ -61,6 +61,7 @@ export class UserDetailComponent {
   }
 
   editUserDetail() {
-    this.dialogRef.open(DialogEditUserComponent);
+    const dialog = this.dialogRef.open(DialogEditUserComponent);
+    dialog.componentInstance.user = this.user;
   }
 }
