@@ -57,11 +57,11 @@ export class UserDetailComponent {
 
   editMenu() {
     const dialog = this.dialogRef.open(DialogEditAddressComponent);
-    dialog.componentInstance.user = this.user;
+    dialog.componentInstance.user = new User(this.user.toJSON());
   }
 
   editUserDetail() {
     const dialog = this.dialogRef.open(DialogEditUserComponent);
-    dialog.componentInstance.user = this.user;
+    dialog.componentInstance.user = new User(this.user.toJSON());
   }
 }
